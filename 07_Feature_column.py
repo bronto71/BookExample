@@ -1,3 +1,4 @@
+import tensorflow as tf
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -28,7 +29,7 @@ ax.text(1.85, 150, 'ManBears')
 ax.set_ylim([0, 260])
 ax.set_xlim([1.38, 2.05])
 
-df = pd.DataFrame({'Spcies': spec, 'Weight': weight, 'Height': height})
+df = pd.DataFrame({'Species': spec, 'Weight': weight, 'Height': height})
 
 ax = axarr[1]
 ax.plot(df['Height'], df['Weight'], 'o', alpha=0.3, mfc='w', mec='b')
@@ -40,5 +41,23 @@ plt.tight_layout()
 plt.savefig('test.png', bbox_inches='tight', format='png', dpi=300)
 
 plt.show()
-####################
-###
+
+def input_fn(df):
+    feature_cols = {}
+    feature_cols['Weight'] = tf.constant(df['Weight'].values)
+
+    feature_cols['Species'] = tf.SparseTensor(
+        indices=[[i, 0] for i in range(df['Species'].size)],
+        values=df['Species'].values,
+        dense_shape=[df['Species'].size, 1]
+    )
+    labels = tf.constant(df['Height'].values)
+    return feature_cols, labels
+
+from tensorflow.contrib import layers
+from tensorflow.contrib import learn
+
+Weight = layers.real_valued_column('Weight')
+Species = layers.sparse_column_with_keys(column_name='Species', keys=['Goblin', 'Human', 'MinBears'])
+reg = learn.LinearRegressor(feature_columns=[Weight, Species])
+reg.fit(input_fn=lambda: input_fn(df), steps=50000)
