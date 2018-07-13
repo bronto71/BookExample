@@ -61,3 +61,10 @@ Weight = layers.real_valued_column('Weight')
 Species = layers.sparse_column_with_keys(column_name='Species', keys=['Goblin', 'Human', 'MinBears'])
 reg = learn.LinearRegressor(feature_columns=[Weight, Species])
 reg.fit(input_fn=lambda: input_fn(df), steps=50000)
+
+w_w = reg.get_variable_value('linear/Weight/weight')
+print('Estimation for Weight: {}'.format(w_w))
+
+s_w = reg.get_variable_value('linear/Species/weights')
+b = reg.get_variable_value('linear/bias_weight')
+print('Estimation for Species: {}'.format(s_w + b))
