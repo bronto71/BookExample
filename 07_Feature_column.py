@@ -68,3 +68,5 @@ print('Estimation for Weight: {}'.format(w_w))
 s_w = reg.get_variable_value('linear/Species/weights')
 b = reg.get_variable_value('linear/bias_weight')
 print('Estimation for Species: {}'.format(s_w + b))
+
+## 마지막 라인..
