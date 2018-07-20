@@ -42,6 +42,7 @@ plt.savefig('test.png', bbox_inches='tight', format='png', dpi=300)
 
 plt.show()
 
+
 def input_fn(df):
     feature_cols = {}
     feature_cols['Weight'] = tf.constant(df['Weight'].values)
@@ -53,6 +54,7 @@ def input_fn(df):
     )
     labels = tf.constant(df['Height'].values)
     return feature_cols, labels
+
 
 from tensorflow.contrib import layers
 from tensorflow.contrib import learn
